@@ -10,9 +10,10 @@ class Personnage:
         # Limites de déplacement
         self.x_min = -400
         self.x_max = 500
-        self.vitesse = 5
+        self.vitesse = 10
         self.vie = 1000
         self.vie_maxe = 1000
+        self.toucher = False
         
         # Dictionnaire des images
         self.images = {
@@ -38,6 +39,8 @@ class Personnage:
     # Animation du personnage
     def annimate(self, eta):
         attaques = ["point_droit", "point_gauche", "coup_de_pied"]
+        #création du masque
+        self.mask = pygame.mask.from_surface(self.image)
         # Gestion de la priorité des attaques
         if self.etat_actuel in attaques:
             self.etat_demande = self.etat_actuel
@@ -48,10 +51,11 @@ class Personnage:
             self.etat_actuel = self.etat_demande
             self.index = 0
             self.compteur = 0
+            self.toucher = False
         # Incrémentation du compteur
         self.compteur += 1
         # Mise à jour de l'index
-        if self.compteur >= 2:
+        if self.compteur >= 1:
             self.compteur = 0
             # Bloquer l'index sur la dernière frame pour la garde
             if self.etat_actuel == "garde":
@@ -73,10 +77,23 @@ class Personnage:
     
     
     # Déplacement du personnage
-    def moov(self):
+    def moov(self, en_colision):
         # Mouvement vers la droite
-        if self.etat_actuel == "avancer" and self.x < self.x_max:
+        if self.etat_actuel == "avancer" and self.x < self.x_max and not en_colision:
             self.x += self.vitesse
         # Mouvement vers la gauche
         elif self.etat_actuel == "reculer" and self.x > self.x_min:
             self.x -= self.vitesse
+    
+    
+    #metode pour créer la hitbox
+    def get_hitbox(self):
+        bbox = self.image.get_bounding_rect()
+        largeur_hitbox = bbox.width * 0.6
+        hauteur_hitbox = bbox.height * 0.55
+        decalage_x = bbox.x + (bbox.width - largeur_hitbox) / 2
+        decalage_y = bbox.y
+        rect = pygame.Rect(self.x + decalage_x, self.y + decalage_y, largeur_hitbox, hauteur_hitbox)
+        if self.etat_actuel == "point_droit":
+            rect.width += 30
+        return rect
