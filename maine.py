@@ -6,6 +6,11 @@ from adversaire import Adversaire
 from barre_de_vie import barre
 
 pygame.init()
+#lancement du son de fon
+pygame.mixer.init()
+pygame.mixer.music.load("acets/music_fon.mpeg")
+pygame.mixer.music.play(-1)  # -1 = boucle infinie
+pygame.mixer.music.set_volume(1.0)
 
 horloge = pygame.time.Clock()
 fenetre = pygame.display.set_mode((1280, 720))
@@ -13,6 +18,7 @@ fenetre = pygame.display.set_mode((1280, 720))
 # Chargement du fond
 fond = pygame.image.load("acets/image_fon.jpg")
 fond = pygame.transform.scale(fond, (1280, 720))
+
 
 # Création des entités
 perso = Personnage(-400, 15, 1/3)
@@ -89,4 +95,4 @@ while True:
 
     pygame.display.flip()
 
-    horloge.tick(240)
+    horloge.tick(60)

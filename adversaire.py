@@ -10,7 +10,7 @@ class Adversaire:
         # Limites de déplacement
         self.x_min = -400
         self.x_max = 500
-        self.vitesse = 10
+        self.vitesse = 5
         self.vie = 1000
         self.vie_maxe = 1000
         self.toucher = False
@@ -55,7 +55,7 @@ class Adversaire:
         # Incrémentation du compteur
         self.compteur += 1
         # Mise à jour de l'index
-        if self.compteur >= 0:
+        if self.compteur >= 2:
             self.compteur = 0
             # Bloquer l'index sur la dernière frame pour la garde
             if self.etat_actuel == "garde":
@@ -95,6 +95,7 @@ class Adversaire:
         decalage_x = bbox.x + (bbox.width - largeur_hitbox) / 2
         decalage_y = bbox.y
         rect = pygame.Rect(self.x + decalage_x, self.y + decalage_y, largeur_hitbox, hauteur_hitbox)
-        if self.etat_actuel == "point_droit":
-            rect.width += 30
+        if self.etat_actuel == "point_droit" or self.etat_actuel == "point_gauche":
+            rect.x = 70
+            rect.width += 70
         return rect
